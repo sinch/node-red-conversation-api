@@ -1,31 +1,31 @@
 {
-    "name": "@sinch/node-red-contrib-sinch-conversation-api",
-    "version": "0.0.1",
-    "description": "",
-    "scripts": {
-        "lint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext .js .",
-        "lint:fix": "npm run lint -- --fix"
-    },
-    "author": "Sinch AB",
-    "license": "ISC",
-    "node-red": {
-        "nodes": {
-            "sinch-convapi-configuration": "src/configuration-nodes/conversation-api/conversation-api.js",
-            "sinch-received-message": "src/nodes/received-message/received-message.js",
-            "sinch-api": "src/apis/index.js"
-        }
-    },
-    "devDependencies": {
-        "eslint": "5.16.0",
-        "eslint-config-nodejs": "2.0.0",
-        "eslint-config-prettier": "6.2.0",
-        "eslint-plugin-html": "5.0.5",
-        "eslint-plugin-prettier": "3.1.0",
-        "eslint-plugin-security": "1.4.0",
-        "node-red": "3.0.0",
-        "prettier": "1.18.2"
-    },
-    "dependencies": {
-        "got": "11.8.1"
+  "name": "@sinch/node-red-contrib-sinch-conversation-api",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext .js .",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "author": "Sinch AB",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "sinch-convapi-configuration": "src/configuration-nodes/conversation-api/conversation-api.js",
+      "sinch-received-message": "src/nodes/received-message/received-message.js",
+      "sinch-api": "src/apis/index.js"
     }
+  },
+  "devDependencies": {
+    "eslint": "5.16.0",
+    "eslint-config-nodejs": "2.0.0",
+    "eslint-config-prettier": "6.2.0",
+    "eslint-plugin-html": "5.0.5",
+    "eslint-plugin-prettier": "3.1.0",
+    "eslint-plugin-security": "1.4.0",
+    "node-red": "3.0.0",
+    "prettier": "1.18.2"
+  },
+  "dependencies": {
+    "got": "11.8.1"
+  }
 }

@@ -1,12 +1,12 @@
 {
-	"node-label": "Conversation API configuration",
-	"projectId": "Project ID",
-	"app": "App",
-	"invalid_keySecret": "Invalid key-secret, please check it and try again.",
-	"keyId": "Key ID",
-	"keySecret": "Key Secret",
-	"authentication-error": "Authentication error",
-	"no-apps-available": "No apps available",
-	"proceed": "Proceed ❯❯",
-	"region": "Region"
+  "node-label": "Conversation API configuration",
+  "projectId": "Project ID",
+  "app": "App",
+  "invalid_keySecret": "Invalid key-secret, please check it and try again.",
+  "keyId": "Key ID",
+  "keySecret": "Key Secret",
+  "authentication-error": "Authentication error",
+  "no-apps-available": "No apps available",
+  "proceed": "Proceed ❯❯",
+  "region": "Region"
 }

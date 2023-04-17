@@ -1,5 +1,5 @@
-const { keysToCamel } = require('../utils/helpers');
-const { tryToParseJSON } = require('../utils/helpers');
+const { keysToCamel } = require("../utils/helpers");
+const { tryToParseJSON } = require("../utils/helpers");
 
 let triggersByApp = {};
 
@@ -33,13 +33,11 @@ const setMessage = () => async (req, _, next) => {
   if (body.message && body.message.contactMessage) {
     const { contactMessage } = body.message;
 
-    req.message = { sinch_data: body.message};
+    req.message = { sinch_data: body.message };
 
     const metadata = tryToParseJSON(body.messageMetadata);
     req.message.sinch_data.variables =
-      (metadata &&
-        tryToParseJSON(metadata.variables)) ||
-      {};
+      (metadata && tryToParseJSON(metadata.variables)) || {};
 
     req.message.sinch_data.messageMetadata = metadata;
     req.message.payload =
@@ -57,16 +55,14 @@ const setMessage = () => async (req, _, next) => {
  * receive node, or to trigger(s) registered for the project
  */
 const dispatchMessage = () => async (req, _, next) => {
-  const {
-    appId,
-  } = req.message;
+  const { appId } = req.message;
 
   const sendToTriggers = () => {
     if (!triggersByApp[appId] || triggersByApp[appId].length === 0) {
       return next();
     }
     const receivedMessageNodes = triggersByApp[appId].filter(
-      (triggerNode) => triggerNode.type === 'sinch-received-message'
+      (triggerNode) => triggerNode.type === "sinch-received-message"
     );
     if (receivedMessageNodes.length === 0) {
       return next();
@@ -75,7 +71,7 @@ const dispatchMessage = () => async (req, _, next) => {
       receivedMessageNode.onMessageIn(req.message);
     });
   };
-  
+
   sendToTriggers();
 };
 
@@ -84,13 +80,13 @@ const dispatchMessage = () => async (req, _, next) => {
  */
 const setup = (RED) => {
   RED.httpNode.post(
-    '/callback',
+    "/callback",
     respondToCallback(),
     setMessage(),
     dispatchMessage(RED),
-    (err, _req, _res, _next) => {
+    (err) => {
       if (err) {
-        throw new Error('callbackReceiver', err);
+        throw new Error("callbackReceiver", err);
       }
     }
   );

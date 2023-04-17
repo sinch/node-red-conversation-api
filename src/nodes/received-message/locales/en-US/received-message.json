@@ -1,5 +1,4 @@
 {
-    "node-label": "Received message",
-    "conversation-api-config": "Conversation API configuration"
+  "node-label": "Received message",
+  "conversation-api-config": "Conversation API configuration"
 }
-  

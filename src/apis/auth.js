@@ -3,7 +3,7 @@ const { HYDRA_TOKEN_URL } = require("../constants");
 
 const safeLimit = 10000;
 let expiresOn = 0;
-let lastUser, lastPass, token, type;
+let lastUser, lastPass, token;
 
 const getToken = async (username, password) => {
   if (
@@ -18,7 +18,7 @@ const getToken = async (username, password) => {
         form: { grant_type: "client_credentials" },
         responseType: "json",
       })
-      .catch((err) => {
+      .catch(() => {
         return null;
       });
 
@@ -26,7 +26,6 @@ const getToken = async (username, password) => {
     const { body } = res;
     expiresOn = Date.now() + body.expires_in * 1000 - safeLimit;
     token = body.access_token;
-    type = body.token_type;
     lastUser = username;
     lastPass = password;
   }

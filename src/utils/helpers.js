@@ -13,8 +13,8 @@ const toCamel = (s) => {
   return s.replace(/([-_][a-z])/gi, ($1) => {
     return $1
       .toUpperCase()
-      .replace('-', '')
-      .replace('_', '');
+      .replace("-", "")
+      .replace("_", "");
   });
 };
 
@@ -23,7 +23,7 @@ const isArray = function(a) {
 };
 
 const isObject = function(o) {
-  return o === Object(o) && !isArray(o) && typeof o !== 'function';
+  return o === Object(o) && !isArray(o) && typeof o !== "function";
 };
 
 const keysToCamel = (o) => {
@@ -44,8 +44,8 @@ const keysToCamel = (o) => {
   return o;
 };
 
-const getConvAPIURL = (projectId, region = 'eu') => {
-    return `https://${region}.conversation.api.sinch.com/v1/projects/${projectId}`
+const getConvAPIURL = (projectId, region = "eu") => {
+  return `https://${region}.conversation.api.sinch.com/v1/projects/${projectId}`;
 };
 
 const tryToParseJSON = (data) => {
