@@ -1,0 +1,239 @@
+<script type="text/javascript">
+  const isValidProperty = (node, property) => {
+    const inputProperty = $(`#node-input-${property}`);
+    return (
+      (inputProperty.val() && inputProperty.val() !== "") ||
+      (node[property] && node[property] !== "")
+    );
+  };
+  const validateRequiredConvapiProperty = (value, node) => {
+    return (property) =>
+      (value && value !== "") || isValidProperty(node, property);
+  };
+  RED.nodes.registerType("sinch-convapi-configuration", {
+    category: "config",
+    defaults: {
+      projectId: {
+        value: "",
+        validate: function(value) {
+          return validateRequiredConvapiProperty(value, this)("projectId");
+        },
+      },
+      keyId: {
+        value: "",
+        validate: function(value) {
+          return validateRequiredConvapiProperty(value, this)("keyId");
+        },
+      },
+      appId: {
+        value: "",
+        validate: function(value) {
+          return validateRequiredConvapiProperty(value, this)("appId");
+        },
+      },
+      appDisplayName: { value: "" },
+      region: { values: "eu" },
+    },
+    credentials: {
+      keySecret: { type: "text", required: true },
+    },
+    label: function() {
+      return this.appDisplayName;
+    },
+    paletteLabel: function() {
+      return this._("node-label") || "Conversation API Configuration";
+    },
+    oneditprepare,
+  });
+
+  function oneditprepare() {
+    const invalidKeySecret = $("#invalid-keySecret");
+    const loaderIndicator = $("#loader-indicator");
+    const nodeInputAppDisplayName = $("#node-config-input-appDisplayName");
+    const nodeInputAppSelect = $("#node-config-input-appSelect");
+    const nodeInputKeyId = $("#node-config-input-keyId");
+    const nodeInputKeySecret = $("#node-config-input-keySecret");
+    const nodeInputProjectId = $("#node-config-input-projectId");
+    const nodeInputRegion = $("#node-config-input-region");
+    const noFreeApps = $("#no-free-apps");
+    const triggerProceedButton = $("#trigger-proceed-button");
+
+    nodeInputAppSelect.change((evt) => {
+      if (evt.target.value) {
+        const { id } = JSON.parse(evt.target.value);
+        if (id) {
+          this.appId = id;
+        }
+      }
+    });
+
+    const loadApps = () => {
+      const usedApps = [];
+      const usedAppsForCurrentProject = [];
+      RED.nodes.eachConfig(({ id, type, appId, projectId }) => {
+        if (type === "sinch-convapi-configuration" && id !== this.id) {
+          usedApps.push(appId);
+          if (projectId === nodeInputProjectId.val()) {
+            usedAppsForCurrentProject.push(appId);
+          }
+        }
+      });
+      $.ajax({
+        url: location.pathname + "apps",
+        method: "POST",
+        data: {
+          projectId: nodeInputProjectId.val(),
+          keyId: nodeInputKeyId.val(),
+          keySecret: nodeInputKeySecret.val(),
+          region: nodeInputRegion.val(),
+        },
+        success: (res) => {
+          if (res.apps && res.apps.length) {
+            noFreeApps.hide();
+            const allAppsUsed = res.apps.every(({ id }) =>
+              usedApps.includes(id)
+            );
+            nodeInputAppSelect.empty();
+            res.apps.forEach(({ id, display_name, region }) => {
+              const isAppUsed = usedApps.includes(id);
+              nodeInputAppSelect.append(
+                $(`<option ${isAppUsed ? "disabled" : ""}></option>`)
+                  .attr("value", JSON.stringify({ id, region }))
+                  .attr("selected", this.appId === id)
+                  .text(
+                    `${display_name || id}${
+                      isAppUsed ? " (already in use)" : ""
+                    }`
+                  )
+              );
+            });
+            if (allAppsUsed) {
+              noFreeApps.show();
+            }
+            nodeInputAppSelect.prop("disabled", false);
+            nodeInputAppDisplayName.val(
+              nodeInputAppSelect.children("option:selected").text()
+            );
+          } else {
+            nodeInputAppSelect.append(
+              $("<option></option>")
+                .attr("value", "")
+                .text(this._("no-apps-available"))
+            );
+          }
+        },
+        error: () => {
+          nodeInputAppSelect.empty();
+          nodeInputAppSelect.append(
+            $("<option></option>")
+              .attr("value", "")
+              .text(this._("authentication-error"))
+          );
+        },
+        complete: () => {
+          nodeInputAppSelect.trigger("change");
+        },
+      });
+    };
+
+    if (
+      nodeInputProjectId.val() &&
+      nodeInputKeyId.val() &&
+      nodeInputKeySecret.val() &&
+      nodeInputRegion.val()
+    ) {
+      loadApps();
+    }
+
+    triggerProceedButton.click(() => {
+      invalidKeySecret.hide();
+      loaderIndicator.show();
+      nodeInputKeySecret.prop("disabled", true);
+      triggerProceedButton.addClass("disabled");
+      $.ajax({
+        type: "POST",
+        url: location.pathname + "token",
+        data: {
+          keyId: nodeInputKeyId.val(),
+          keySecret: nodeInputKeySecret.val(),
+        },
+        success: () => {
+          loadApps();
+        },
+        error: () => {
+          invalidKeySecret.show(250, () => nodeInputKeySecret.focus());
+        },
+        complete: () => {
+          loaderIndicator.hide();
+          nodeInputKeySecret.prop("disabled", false);
+          triggerProceedButton.removeClass("disabled");
+        },
+      });
+    });
+    nodeInputAppSelect.change(() => {
+      nodeInputAppDisplayName.val(
+        nodeInputAppSelect.children("option:selected").text()
+      );
+    });
+  }
+</script>
+
+<script type="text/html" data-template-name="sinch-convapi-configuration">
+  <div class="form-tips" id="authentication-info" style="border-color: #d5615f; display: none; margin-bottom: 12px;">
+    <span data-i18n="authentication_error" style="color: #d5615f;"></span>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-projectId"><span data-i18n="projectId"></span></label>
+    <input type="text" id="node-config-input-projectId" placeholder="Project ID">
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-keyId"><span data-i18n="keyId"></span></label>
+    <input type="text" id="node-config-input-keyId" placeholder="Key ID">
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-region"><span data-i18n="region"></span></label>
+    <select type="text" id="node-config-input-region">
+      <option value="eu">EU</option>
+      <option value="us">US</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-keySecret"><span data-i18n="keySecret"></span></label>
+    <div style="display: inline-block; width: 70%">
+      <div style="display: flex">
+        <div style="flex-grow: 1; position: relative;">
+          <input type="password" id="node-config-input-keySecret" style="width: 100%;" />
+          <div id="loader-indicator" style="display: none; position: absolute; right: 8px; top: 4px;">
+            <svg style="width: 25px; fill: none; stroke: #a0a0a0; stroke-width: 12;" viewBox="0 0 100 100">
+              <path d="M 50 10 A 40 40 0 1 0 50 90">
+                <animateTransform attributeName="transform" type="rotate" dur="1s" from="0 50 50" to="360 50 50" repeatCount="indefinite" />
+              </path>
+            </svg>
+          </div>
+        </div>
+        <a class="red-ui-button disable" id="trigger-proceed-button" data-i18n="proceed"></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="invalid-keySecret" style="display: none; margin-bottom: 12px; margin-top: -8px;">
+    <span style="width: 30%; display: inline-block;"></span>
+    <span data-i18n="invalid_keySecret" style="color: #d5615f;"></span>
+  </div>
+
+  <div id="no-free-apps" style="display: none; margin-bottom: 12px; margin-top: -8px;">
+    <span style="width: 30%; display: inline-block;"></span>
+    <span data-i18n="no-apps-available" style="color: #d5615f;"></span>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-appSelect"><span data-i18n="app"></span></label>
+    <select id="node-config-input-appSelect" style="width: 70%" disabled></select>
+  </div>
+
+  <input type="hidden" id="node-config-input-appDisplayName" />
+</script>

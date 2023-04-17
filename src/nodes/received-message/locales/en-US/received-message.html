@@ -1,0 +1,22 @@
+<script type="text/html" data-help-name="sinch-received-message">
+  <p>
+    Receive inbound messages from Sinch Conversation API for a specific application.
+  </p>
+  <h2>Node configurations:</h2>
+  <p>
+    Create and/or select a Conversation API configuration.
+  </p>
+  <h3>Output</h3>
+  <dl class="message-properties">
+    <dt>
+      payload <span class="property-type">string</span>
+    </dt>
+    <dd>Incoming message from Sinch Conversation API.</dd>
+  </dl>
+  <dl class="message-properties">
+    <dt>
+      sinch_data <span class="property-type">object</span>
+    </dt>
+    <dd>Additional incoming message data, such as: <code>metadata</code>, <code>variables</code>, <code>conversationID</code> etc. See <a href="https://developers.sinch.com/docs/conversation/api-reference/conversation/tag/Messages/" target="_blanc">documentation</a> for full list of properties.</dd>
+  </dl>
+</script>

@@ -1,0 +1,13 @@
+{
+	"node-label": "Conversation API configuration",
+	"projectId": "Project ID",
+	"app": "App",
+	"authentication_error": "Authentication error (unknown user name/email): please close this tab and try to reopen this conversation flow from Sinch Dashboard panel.",
+	"invalid_keySecret": "Invalid key-secret, please check it and try again.",
+	"keyId": "Key ID",
+	"keySecret": "Key Secret",
+	"authentication-error": "Authentication error",
+	"no-apps-available": "No apps available",
+	"proceed": "Proceed ❯❯",
+	"region": "Region"
+}

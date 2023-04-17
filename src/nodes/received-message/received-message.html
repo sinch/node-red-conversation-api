@@ -1,0 +1,39 @@
+<script type="text/javascript">
+  RED.nodes.registerType("sinch-received-message", {
+    category: "Sinch Messaging",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "" },
+      convapiConfiguration: {
+        value: '',
+        type: "sinch-convapi-configuration",
+      },
+      inputs: { value: 0 },
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "icons/received-message_icon.svg",
+    paletteLabel: function() {
+      return this._("node-label") || "Received message";
+    },
+    label: function() {
+      return this.name || this._("node-label") || "Received message";
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="sinch-received-message">
+  <div class="form-row">
+      <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-convapiConfiguration"><span data-i18n="conversation-api-config"></span></label>
+    <input type="text" id="node-input-convapiConfiguration">
+  </div>
+
+  <style>
+    .red-ui-editor .form-row label { width: 130px; }
+  </style>
+</script>
