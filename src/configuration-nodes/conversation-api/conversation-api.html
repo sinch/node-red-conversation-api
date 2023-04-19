@@ -47,7 +47,6 @@
   });
 
   function oneditprepare() {
-    const invalidKeySecret = $("#invalid-keySecret");
     const loaderIndicator = $("#loader-indicator");
     const nodeInputAppDisplayName = $("#node-config-input-appDisplayName");
     const nodeInputAppSelect = $("#node-config-input-appSelect");
@@ -79,7 +78,7 @@
         }
       });
       $.ajax({
-        url: location.pathname + "apps",
+        url: location.pathname + "sinch-conversation-api/apps",
         method: "POST",
         data: {
           projectId: nodeInputProjectId.val(),
@@ -121,6 +120,9 @@
                 .text(this._("no-apps-available"))
             );
           }
+          loaderIndicator.hide();
+          nodeInputKeySecret.prop("disabled", false);
+          triggerProceedButton.removeClass("disabled");
         },
         error: () => {
           nodeInputAppSelect.empty();
@@ -129,6 +131,9 @@
               .attr("value", "")
               .text(this._("authentication-error"))
           );
+          loaderIndicator.hide();
+          nodeInputKeySecret.prop("disabled", false);
+          triggerProceedButton.removeClass("disabled");
         },
         complete: () => {
           nodeInputAppSelect.trigger("change");
@@ -146,29 +151,10 @@
     }
 
     triggerProceedButton.click(() => {
-      invalidKeySecret.hide();
       loaderIndicator.show();
       nodeInputKeySecret.prop("disabled", true);
       triggerProceedButton.addClass("disabled");
-      $.ajax({
-        type: "POST",
-        url: location.pathname + "token",
-        data: {
-          keyId: nodeInputKeyId.val(),
-          keySecret: nodeInputKeySecret.val(),
-        },
-        success: () => {
-          loadApps();
-        },
-        error: () => {
-          invalidKeySecret.show(250, () => nodeInputKeySecret.focus());
-        },
-        complete: () => {
-          loaderIndicator.hide();
-          nodeInputKeySecret.prop("disabled", false);
-          triggerProceedButton.removeClass("disabled");
-        },
-      });
+      loadApps();
     });
     nodeInputAppSelect.change(() => {
       nodeInputAppDisplayName.val(
@@ -214,11 +200,6 @@
         <a class="red-ui-button disable" id="trigger-proceed-button" data-i18n="proceed"></a>
       </div>
     </div>
-  </div>
-
-  <div id="invalid-keySecret" style="display: none; margin-bottom: 12px; margin-top: -8px;">
-    <span style="width: 30%; display: inline-block;"></span>
-    <span data-i18n="invalid_keySecret" style="color: #d5615f;"></span>
   </div>
 
   <div id="no-free-apps" style="display: none; margin-bottom: 12px; margin-top: -8px;">

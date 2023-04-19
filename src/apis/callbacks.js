@@ -1,20 +1,27 @@
 const { keysToCamel } = require("../utils/helpers");
 const { tryToParseJSON } = require("../utils/helpers");
 
-let triggersByApp = {};
+let triggersByApp;
 
 /*
  * Called by Received message node on deploy
  */
-const registerTrigger = (receiveMessageNode) => {
-  const { appId } = receiveMessageNode.config;
-  triggersByApp[appId] = triggersByApp[appId] || [];
-  triggersByApp[appId].push(receiveMessageNode);
-  return () => {
-    triggersByApp[appId] = triggersByApp[appId].filter((t) => {
-      return t !== receiveMessageNode;
-    });
-  };
+const registerTrigger = (node) => {
+  if (node.convApiConfig.config && node.convApiConfig.config.appId) {
+    const { appId } = node.convApiConfig.config;
+    triggersByApp[appId] = triggersByApp[appId] || [];
+
+    if (triggersByApp[appId].length > 0) {
+      console.log(`Duplicate triggers registered for app [${appId}]`);
+    }
+
+    triggersByApp[appId].push(node);
+    return () => {
+      triggersByApp[appId] = triggersByApp[appId].filter((t) => {
+        return t !== node;
+      });
+    };
+  } else return () => {};
 };
 
 /*
@@ -33,13 +40,13 @@ const setMessage = () => async (req, _, next) => {
   if (body.message && body.message.contactMessage) {
     const { contactMessage } = body.message;
 
-    req.message = { sinch_data: body.message };
+    req.message = { sinchData: body };
 
     const metadata = tryToParseJSON(body.messageMetadata);
-    req.message.sinch_data.variables =
+    req.message.sinchData.variables =
       (metadata && tryToParseJSON(metadata.variables)) || {};
 
-    req.message.sinch_data.messageMetadata = metadata;
+    req.message.sinchData.messageMetadata = metadata;
     req.message.payload =
       (contactMessage.mediaMessage && contactMessage.mediaMessage.url) ||
       (contactMessage.textMessage && contactMessage.textMessage.text) ||
@@ -55,7 +62,7 @@ const setMessage = () => async (req, _, next) => {
  * receive node, or to trigger(s) registered for the project
  */
 const dispatchMessage = () => async (req, _, next) => {
-  const { appId } = req.message;
+  const { appId } = req.message.sinchData;
 
   const sendToTriggers = () => {
     if (!triggersByApp[appId] || triggersByApp[appId].length === 0) {
@@ -80,13 +87,13 @@ const dispatchMessage = () => async (req, _, next) => {
  */
 const setup = (RED) => {
   RED.httpNode.post(
-    "/callback",
+    "/sinch-conversation-api/callback",
     respondToCallback(),
     setMessage(),
     dispatchMessage(RED),
     (err) => {
       if (err) {
-        throw new Error("callbackReceiver", err);
+        console.log('CallbackError');
       }
     }
   );

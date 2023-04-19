@@ -1,0 +1,89 @@
+<script type="text/javascript">
+  RED.nodes.registerType("sinch-message", {
+    color: "#a6bbcf",
+    category: "Sinch Messaging",
+    defaults: {
+      name: { value: "" },
+      message: {
+        value: '{"text_message":{"text":"This is a text message."}}',
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-commenting",
+    label: function() {
+      return this.name || this._("node-label") || "Message";
+    },
+    paletteLabel: function() {
+      return this._("node-label") || "Message";
+    },
+    oneditprepare: function() {
+      const that = this;
+      const stateId = RED.editor.generateViewStateId("node", this, "");
+      this.editor = RED.editor.createEditor({
+        id: "node-input-message-editor",
+        mode: "ace/mode/json",
+        stateId: stateId,
+        value: this.message,
+      });
+
+      RED.popover.tooltip($("#node-message-expand-editor"), this._("expand"));
+      $("#node-message-expand-editor").on("click", function(e) {
+        e.preventDefault();
+        const value = that.editor.getValue();
+        that.editor.saveView();
+        RED.editor.editText({
+          mode: "json",
+          value: value,
+          stateId: stateId,
+          width: "Infinity",
+          focus: true,
+          complete: function(v, cursor) {
+            that.editor.setValue(v, -1);
+            setTimeout(function() {
+              that.editor.restoreView();
+              that.editor.focus();
+            }, 250);
+          },
+        });
+      });
+    },
+    oneditsave: function() {
+      $("#node-input-message").val(this.editor.getValue());
+      this.editor.destroy();
+      delete this.editor;
+    },
+    oneditcancel: function() {
+      this.editor.destroy();
+      delete this.editor;
+    },
+    oneditresize: function(size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height();
+      for (var i = 0; i < rows.length; i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -=
+        parseInt(editorRow.css("marginTop")) +
+        parseInt(editorRow.css("marginBottom"));
+      $(".node-text-editor").css("height", height + "px");
+      this.editor.resize();
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="sinch-message">
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name"></div>
+  </div>
+  <div class="form-row" style="position: relative; margin-bottom: 0px;">
+      <label for="node-input-message"><i class="fa fa-file-code-o"></i> <span data-i18n="message"></span></label>
+      <input type="hidden" id="node-input-message" autofocus="autofocus">
+      <div style="position: absolute; right:0;display:inline-block; text-align: right; font-size: 0.8em;">
+          <button type="button" id="node-message-expand-editor" class="red-ui-button red-ui-button-small"><i class="fa fa-expand"></i></button>
+      </div>
+  </div>
+  <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-message-editor"></div>
+</script>
