@@ -1,3 +1,5 @@
+const Mustache = require("mustache");
+
 const getNodesByType = (type, RED) => {
   const nodes = [];
   const types = Array.isArray(type) ? type : [type];
@@ -56,9 +58,13 @@ const tryToParseJSON = (data) => {
   }
 };
 
+const interpolateMessage = (message, variables) =>
+  Mustache.render(message, variables);
+
 module.exports = {
   getNodesByType,
   keysToCamel,
   getConvAPIURL,
   tryToParseJSON,
+  interpolateMessage,
 };

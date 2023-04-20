@@ -1,0 +1,28 @@
+<script type="text/html" data-help-name="sinch-message">
+  <p>
+      Configure the message to send in JSON format. The message field supports Mustache syntax.
+      Add a variable in the message using hanldebar syntax <code>{{}}</code> and pass the variable on <code>msg.variables</code>.
+      <h3>Example</h3>
+      <pre>
+  {
+    "text_message": {
+      "text": "Hello {{name}}, this is a text message."
+    }
+  }
+  </pre>
+      For more examples, go to the <a href="https://developers.sinch.com/docs/conversation/message-types/text-message/" target="_blank">Conversation API documentation</a>
+  </p>
+  <h2>Node configurations:</h2>
+  <h3>Input</h3>
+  <dl class="message-properties">
+      <dt>message <span class="property-type">object</span></dt>
+      <dd>If provided, will override the message from the configuration.</dd>
+      <dt>variables <span class="property-type">object</span></dt>
+      <dd>Will be rendered in the message if defined using mustache handlebars.</dd>
+  </dl>
+  <h3>Output</h3>
+  <dl class="message-properties">
+      <dt>message <span class="property-type">object</span></dt>
+      <dd>The message to send.</dd>
+  </dl>
+</script>

@@ -27,6 +27,7 @@
     "prettier": "1.18.2"
   },
   "dependencies": {
-    "got": "11.8.1"
+    "got": "11.8.1",
+    "mustache": "^4.2.0"
   }
 }

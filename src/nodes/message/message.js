@@ -1,3 +1,5 @@
+const { interpolateMessage } = require('../../utils/helpers');
+
 module.exports = function(RED) {
   class Message {
     constructor(config) {
@@ -5,7 +7,10 @@ module.exports = function(RED) {
       RED.nodes.createNode(this, config);
 
       this.on('input', (msg) => {
-        const message = msg.message || this.config.message;
+        let message = msg.message || this.config.message;
+        if (msg.variables) {
+          message = interpolateMessage(message, msg.variables);
+        }
         const newMessage = { ...msg, message };
         this.send(newMessage);
       })
