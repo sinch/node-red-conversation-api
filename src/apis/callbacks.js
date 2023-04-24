@@ -1,5 +1,6 @@
 const { keysToCamel } = require("../utils/helpers");
 const { tryToParseJSON } = require("../utils/helpers");
+const GetNode = require("../utils/get-node");
 
 let triggersByApp;
 
@@ -34,25 +35,36 @@ const respondToCallback = () => (_, res, next) => {
 
 /*
  * Express middleware that builds message from req.body
+ * lastResponse contains the complete message from the conversation API
+ * variables and awaiting node id are stored in the conversationMetadata (called messageMetadata from the API)
+ * messageMetadata is called only metadata from the API and contains the postbackData for routing
+ * payload contains the actual message sent from the API
  */
 const setMessage = () => async (req, _, next) => {
   const body = keysToCamel(req.body);
   if (body.message && body.message.contactMessage) {
-    const { contactMessage } = body.message;
+    const {
+      contactMessage,
+      channelIdentity,
+      contactId,
+      metadata,
+    } = body.message;
+    const messageMetadata = tryToParseJSON(body.messageMetadata);
 
-    req.message = { sinchData: body };
-
-    const metadata = tryToParseJSON(body.messageMetadata);
-    req.message.sinchData.variables =
-      (metadata && tryToParseJSON(metadata.variables)) || {};
-
-    req.message.sinchData.messageMetadata = metadata;
-    req.message.payload =
-      (contactMessage.mediaMessage && contactMessage.mediaMessage.url) ||
-      (contactMessage.textMessage && contactMessage.textMessage.text) ||
-      contactMessage.choiceResponseMessage ||
-      contactMessage.locationMessage ||
-      contactMessage;
+    req.message = {
+      lastResponse: body,
+      contact: { channelIdentities: [channelIdentity], contactId },
+      variables:
+        (messageMetadata && tryToParseJSON(messageMetadata.variables)) || {},
+      conversationMetadata: messageMetadata,
+      messageMetadata: tryToParseJSON(metadata) || undefined,
+      payload:
+        (contactMessage.mediaMessage && contactMessage.mediaMessage.url) ||
+        (contactMessage.textMessage && contactMessage.textMessage.text) ||
+        contactMessage.choiceResponseMessage ||
+        contactMessage.locationMessage ||
+        contactMessage,
+    };
     next();
   }
 };
@@ -61,8 +73,10 @@ const setMessage = () => async (req, _, next) => {
  * Middleware that dispatches the inbound message to a waiting
  * receive node, or to trigger(s) registered for the project
  */
-const dispatchMessage = () => async (req, _, next) => {
-  const { appId } = req.message.sinchData;
+const dispatchMessage = (RED) => async (req, _, next) => {
+  const getNode = GetNode(RED);
+  const { lastResponse, messageMetadata, conversationMetadata } = req.message;
+  const { appId, message } = lastResponse;
 
   const sendToTriggers = () => {
     if (!triggersByApp[appId] || triggersByApp[appId].length === 0) {
@@ -79,7 +93,27 @@ const dispatchMessage = () => async (req, _, next) => {
     });
   };
 
-  sendToTriggers();
+  if (
+    message &&
+    message.contactMessage & message.contactMessage.choiceResponseMessage
+  ) {
+    const receiveNode =
+      messageMetadata &&
+      messageMetadata.postbackNode &&
+      getNode(messageMetadata.postbackNode);
+    if (!receiveNode) {
+      return sendToTriggers();
+    }
+    receiveNode.onResponse(req.message);
+  } else if (conversationMetadata && conversationMetadata.nextResponse) {
+    const receiveNode = getNode(conversationMetadata.nextResponse);
+    if (!receiveNode) {
+      return sendToTriggers();
+    }
+    receiveNode.onResponse(req.message, receiveNode);
+  } else {
+    sendToTriggers();
+  }
 };
 
 /*
@@ -93,7 +127,7 @@ const setup = (RED) => {
     dispatchMessage(RED),
     (err) => {
       if (err) {
-        console.log('CallbackError');
+        console.log("CallbackError");
       }
     }
   );

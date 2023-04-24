@@ -1,0 +1,67 @@
+<script type="text/javascript">
+  RED.nodes.registerType("sinch-send", {
+    color: "#a6bbcf",
+    category: "Sinch Messaging",
+    defaults: {
+      name: { 
+        value: "" ,
+      },
+      convapiConfiguration: {
+        value: "",
+        type: "sinch-convapi-configuration",
+      },
+      ttl: { 
+        value: "",
+      },
+      receive: {
+        value: false,
+      },
+    },
+    inputs: 1,
+    outputs: 2,
+    icon: "font-awesome/fa-paper-plane",
+    outputLabels: ["Success", "Failure"],
+    label: function() {
+      return this.name || this._("node-label") || "Send";
+    },
+    paletteLabel: function() {
+      return this._("node-label") || "Send";
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="sinch-send">
+  <div class="form-row">
+      <label for="node-input-name"><span data-i18n="name"></span></label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name"></div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-convapiConfiguration"><span data-i18n="conversation-api-config"></span></label>
+    <input type="text" id="node-input-convapiConfiguration">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-ttl"><span data-i18n="ttl"></span></label>
+    <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-ttl"></div>
+  </div>
+  <div class="form-row">
+    <label class="checkbox-label" for="node-input-receive">
+      <input type="checkbox" id="node-input-receive" />
+      <span data-i18n="wait-for-response"></span>
+    </label>
+  </div>
+
+  <style>
+     /* allows us to have two checkboxes vertically on a single from-row */
+     .form-row input[type='checkbox'] {
+      display: inline-block;
+      width: 14px;
+      vertical-align: baseline;
+      margin-right: 10px;
+    }
+
+    .red-ui-editor .form-row .checkbox-label {
+      width: 70%;
+    }
+  </style>
+</script>

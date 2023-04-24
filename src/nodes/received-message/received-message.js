@@ -14,7 +14,7 @@ module.exports = function(RED) {
       this.on("close", removeCallback);
     }
 
-    async onMessageIn(inboundMessage) {
+    onMessageIn(inboundMessage) {
       this.send(inboundMessage);
     }
   }
@@ -30,10 +30,7 @@ module.exports = function(RED) {
         const { apps } = tryToParseJSON(body);
         res.send({ apps });
       })
-      .catch((error) => {
-        console.log("Error: ", error);
-        return res.sendStatus(500);
-      });
+      .catch(() => res.sendStatus(500));
   });
 
   RED.nodes.registerType("sinch-received-message", ReceivedMessage);

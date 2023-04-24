@@ -61,10 +61,21 @@ const tryToParseJSON = (data) => {
 const interpolateMessage = (message, variables) =>
   Mustache.render(message, variables);
 
+const formatConversationMetadata = (metadata) => {
+  const formattedMetadata = { fields: {} };
+  for (const [key, value] of Object.entries(metadata)) {
+    if (typeof value !== "undefined") {
+      formattedMetadata.fields[key] = { stringValue: value };
+    }
+  }
+  return formattedMetadata;
+};
+
 module.exports = {
   getNodesByType,
   keysToCamel,
   getConvAPIURL,
   tryToParseJSON,
   interpolateMessage,
+  formatConversationMetadata,
 };
