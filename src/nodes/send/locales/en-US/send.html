@@ -3,10 +3,14 @@
       Send a message using the Conversation API. The message is configured in a Message node or passed on <code>msg.message</code>.
   </p>
   <h2>Node configurations:</h2>
-    Configure or select a Conversation API configuration.
+    <ol>
+      <li>Configure or select a Conversation API configuration.</li>
+      <li><strong>ttl (optional)</strong> - Time to live. E.g. <code>3s, 2m, 1h</code>.</li>
+      <li><strong>Wait for response</strong> - If checked, then the flow will continue when a response arrives.</li>
+    </ol>
   <h3>Input</h3>
   <dl class="message-properties">
-      <dt>message <span class="property-type">object</span></dt>
-      <dd>Message content to be sent.</dd>
+    <dt>message <span class="property-type">object</span></dt>
+    <dd>Message content to be sent.</dd>
   </dl>
 </script>
