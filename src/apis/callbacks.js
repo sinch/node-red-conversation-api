@@ -1,5 +1,8 @@
-const { keysToCamel } = require("../utils/helpers");
-const { tryToParseJSON } = require("../utils/helpers");
+const {
+  tryToParseJSON,
+  getNodesByType,
+  keysToCamel,
+} = require("../utils/helpers");
 const GetNode = require("../utils/get-node");
 
 let triggersByApp;
@@ -31,6 +34,23 @@ const registerTrigger = (node) => {
 const respondToCallback = () => (_, res, next) => {
   res.send({});
   next();
+};
+
+/*
+ * All events should be routed to all event nodes. Only the Inbound Message event should also be routed to either a Receive message node or a send node.
+ */
+const checkAndRouteEvent = (RED) => (req, _, next) => {
+  const getNode = GetNode(RED);
+  const body = keysToCamel(req.body);
+
+  getNodesByType("sinch-events", RED).forEach(({ id }) => {
+    const node = getNode(id);
+    node.onEventIn(body);
+  });
+
+  if (body.message && body.message.contactMessage) {
+    next();
+  }
 };
 
 /*
@@ -123,6 +143,7 @@ const setup = (RED) => {
   RED.httpNode.post(
     "/sinch-conversation-api/callback",
     respondToCallback(),
+    checkAndRouteEvent(RED),
     setMessage(),
     dispatchMessage(RED),
     (err) => {

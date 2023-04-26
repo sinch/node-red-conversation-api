@@ -11,6 +11,7 @@
   "node-red": {
     "nodes": {
       "sinch-convapi-configuration": "src/configuration-nodes/conversation-api/conversation-api.js",
+      "sinch-events": "src/nodes/events/events.js",
       "sinch-received-message": "src/nodes/received-message/received-message.js",
       "sinch-message": "src/nodes/message/message.js",
       "sinch-send": "src/nodes/send/send.js",

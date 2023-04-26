@@ -1,0 +1,65 @@
+<script type="text/javascript">
+  RED.nodes.registerType("sinch-events", {
+    color: "#a6bbcf",
+    category: "Sinch Messaging",
+    defaults: {
+      name: { value: "" },
+      events: {
+        value: "",
+        required: true,
+      },
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "font-awesome/fa-arrows-h",
+    label: function() {
+      return this.name || this._("node-label") || "Events";
+    },
+    paletteLabel: function() {
+      return this._("node-label") || "Events";
+    },
+    oneditprepare: function() {
+      $("#node-input-events").typedInput({
+        types: [
+          {
+            value: "events",
+            multiple: "true",
+            options: [
+              { value: "message", label: "Message Inbound" },
+              { value: "messageDeliveryReport", label: "Message Delivery" },
+              { value: "capabilityNotification", label: "Capability" },
+              { value: "contactCreateNotification", label: "Contact Create" },
+              { value: "contactDeleteNotification", label: "Contact Delete" },
+              { value: "duplicatedContactIdentitiesNotification", label: "Contact Identities Duplication" },
+              { value: "contactMergeNotification", label: "Contact Merge" },
+              { value: "contactUpdateNotification", label: "Contact Update" },
+              { value: "contactUpdateNotification", label: "Conversation Delete" },
+              { value: "conversationStartNotification", label: "Conversation Start" },
+              { value: "conversationStopNotification", label: "Conversation Stop" },
+              { value: "eventDeliveryReport", label: "Event Delivery" },
+              { value: "event", label: "Event Inbound" },
+              { value: "messageSubmitNotification", label: "Message Submit" },
+              { value: "optInNotification", label: "Opt In" },
+              { value: "optOutNotification", label: "Opt Out" },
+              { value: "smartConversationNotification", label: "Smart Conversation" },
+              { value: "unsupportedCallback", label: "Unsupported" },
+            ],
+          },
+        ],
+      });
+    },
+    oneditsave: function() {},
+    oneditcancel: function() {},
+  });
+</script>
+
+<script type="text/html" data-template-name="sinch-events">
+  <div class="form-row">
+      <label for="node-input-name">Name</label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name"></div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-events"><span data-i18n="triggers"></span></label>
+    <input type="text" id="node-input-events">
+  </div>
+</script>

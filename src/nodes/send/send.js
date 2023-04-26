@@ -41,13 +41,15 @@ module.exports = function(RED) {
           return;
         }
 
+        const { receive } = this.config;
+
         const messageMetadata = {
-          postbackNode: this._path,
+          postbackNode: receive ? this._path : undefined,
         };
 
         const conversationMetadata = {
           variables: JSON.stringify(variables),
-          nextResponse: this._path,
+          nextResponse: receive ? this._path : undefined,
         };
 
         sendMessage({
