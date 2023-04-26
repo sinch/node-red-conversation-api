@@ -15,6 +15,7 @@
       "sinch-received-message": "src/nodes/received-message/received-message.js",
       "sinch-message": "src/nodes/message/message.js",
       "sinch-send": "src/nodes/send/send.js",
+      "sinch-start-conversation": "src/nodes/start-conversation/start-conversation.js",
       "sinch-api": "src/apis/index.js"
     }
   },

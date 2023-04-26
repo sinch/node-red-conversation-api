@@ -1,0 +1,136 @@
+<script type="text/javascript">
+  RED.nodes.registerType("sinch-start-conversation", {
+    category: "Sinch Messaging",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "" },
+      variables: {
+        value: "",
+        validate: function(value) {
+          return value.length < 500;
+        },
+      },
+      channelIdentities: {
+        value: [{ channel: "SMS", identity: "" }],
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/paper-plane",
+    paletteLabel: function() {
+      return this._("node-label") || "Start conversation";
+    },
+    label: function() {
+      return this.name || this._("node-label") || "Start conversation";
+    },
+    oneditprepare,
+    oneditsave,
+  });
+  function oneditprepare() {
+    $("#node-input-variables")
+      .typedInput({
+        types: ["json"],
+        default: "json",
+      })
+      .typedInput("width", "100%");
+
+    $("#node-config-input-channelIdentities-container")
+      .css("min-height", "200px")
+      .css("min-width", "250px")
+      .editableList({
+        addButton: false,
+        addItem: (container, i, { channel, identity }) => {
+          const initialInputWidth = (container.width() - 45) / 2;
+          container.css({
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          });
+          channel = typeof channel === "string" ? channel : "";
+          identity = typeof identity === "string" ? identity : "";
+
+          $(`
+            <div class="form-row">
+              <input type="text"
+                id="key-${i}"
+                value="${channel}"
+                placeholder="channel"
+                style="width: ${initialInputWidth}px"
+              >
+              <input type="text"
+                id="value-${i}"
+                value="${identity}"
+                placeholder="+46712345678"
+                style="width: ${initialInputWidth}px"
+              >
+            </div>
+          `).appendTo(container);
+        },
+        removable: true,
+        buttons: [
+          {
+            label: "Add fallback channel",
+            icon: "fa fa-plus",
+            click: function() {
+              $("#node-config-input-channelIdentities-container").editableList(
+                "addItem",
+                { channel: "", identity: "" }
+              );
+            },
+          },
+        ],
+      });
+    this.channelIdentities.forEach(({ channel, identity }) => {
+      $("#node-config-input-channelIdentities-container").editableList(
+        "addItem",
+        {
+          channel,
+          identity,
+        }
+      );
+    });
+  }
+  function oneditsave() {
+    const node = this;
+    node.channelIdentities = [];
+    const channelIdentity = { channel: "", identity: "" };
+    let isChannel = true;
+    $("#node-config-input-channelIdentities-container input").each(function(
+      _,
+      input
+    ) {
+      if (isChannel) {
+        channelIdentity.channel = input.value || "";
+        isChannel = false;
+      } else {
+        channelIdentity.identity = input.value || "";
+        isChannel = true;
+        node.channelIdentities.push(channelIdentity);
+        channelIdentity = { channel: "", identity: "" };
+      }
+    });
+  }
+</script>
+
+<script type="text/html" data-template-name="sinch-start-conversation">
+  <div class="form-row">
+  	<label for="node-input-name">Name</label>
+  	<input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row" style="margin-bottom:0;">
+    <label><i class="fa fa-book"></i> <span data-i18n="identities"></span></label>
+  </div>
+
+  <div class="form-row node-config-input-channelIdentities-container-row">
+    <ol id="node-config-input-channelIdentities-container"></ol>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-variables"><span data-i18n="variables"></span></label>
+    <input type="text" id="node-input-variables">
+  </div>
+
+  <style>
+    .red-ui-editor .form-row label { width: 130px; }
+  </style>
+</script>

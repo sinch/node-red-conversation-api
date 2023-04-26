@@ -8,7 +8,7 @@ module.exports = function(RED) {
       RED.nodes.createNode(this, config);
       this.convApiConfig = RED.nodes.getNode(this.config.convapiConfiguration);
 
-      this.on("input", async (msg, _, done) => {
+      this.on('input', async (msg, _, done) => {
         if (!this.convApiConfig || !this.convApiConfig.config) {
           this.error("Select or configure a Conversation API configuration");
           return;

@@ -1,4 +1,4 @@
-const { interpolateMessage } = require('../../utils/helpers');
+const { interpolateMessage, tryToParseJSON } = require('../../utils/helpers');
 
 module.exports = function(RED) {
   class Message {
@@ -12,7 +12,7 @@ module.exports = function(RED) {
           this.error("No message configured or provided to node input");
         }
         if (msg && msg.variables) {
-          message = interpolateMessage(message, msg.variables);
+          message = interpolateMessage(message, tryToParseJSON(msg.variables));
         }
         const newMessage = { ...msg, message };
         this.send(newMessage);
