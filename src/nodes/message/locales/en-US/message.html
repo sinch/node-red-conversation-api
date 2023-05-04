@@ -1,18 +1,22 @@
 <script type="text/html" data-help-name="sinch-message">
   <p>
-      Configure the message to send. The message is defined in JSON format. 
-      Variavles can be added to the message using hanldebar syntax <code>{{}}</code>. The variables values are fetched from <code>msg.variables</code>.
-      <h3>Example</h3>
-      <pre>
+    Defines a Conversation API message. The message is defined in JSON format. 
+  </p>
+  <h4>Configuration</h4>
+  Variables can be added to the message using hanldebar syntax <code>{{}}</code>. The variables values are fetched from <code>msg.variables</code>.
+  
+  <h4>Message Example</h4>
+  <pre>
   {
     "text_message": {
       "text": "Hello {{name}}, this is a text message."
     }
   }
   </pre>
-      For more message examples, go to the <a href="https://developers.sinch.com/docs/conversation/message-types/text-message/" target="_blank">Conversation API documentation</a>
+  <p>
+    For more message examples, go to the <a href="https://developers.sinch.com/docs/conversation/message-types/text-message/" target="_blank">Conversation API documentation</a>.
   </p>
-  <h2>Node configurations:</h2>
+
   <h3>Input</h3>
   <dl class="message-properties">
       <dt>message <span class="property-type">object</span></dt>

@@ -1,10 +1,13 @@
 <script type="text/html" data-help-name="sinch-received-message">
   <p>
-    Receive inbound messages from Sinch Conversation API for a specific application. Creates an endpoint on <code>/sinch-conversation-api/callback</code>.
+    Receives inbound messages from Sinch Conversation API for a specific application.
+    Creates an endpoint on <code>/sinch-conversation-api/callback</code>.
   </p>
-  <h2>Node configurations:</h2>
+  <h2>Configuration</h2>
   <p>
     Create and/or select a Conversation API configuration.
+    On the App configuraion page on the <a href="https://dashboard.sinch.com/convapi/apps/" target="_blank">Sinch Dashboard</a> 
+    create a Webhook with Target URL: <strong>&lt;node-red-path&gt;/sinch-conversation-api/callback</strong> and select the Trigger <code>MESSAGE_INBOUND</code>.
   </p>
   <h3>Output</h3>
   <dl class="message-properties">
@@ -15,8 +18,8 @@
   </dl>
   <dl class="message-properties">
     <dt>
-      sinch_data <span class="property-type">object</span>
+      lastResponse <span class="property-type">object</span>
     </dt>
-    <dd>Additional incoming message data, such as: <code>metadata</code>, <code>variables</code>, <code>conversationID</code> etc. See <a href="https://developers.sinch.com/docs/conversation/api-reference/conversation/tag/Messages/" target="_blanc">documentation</a> for full list of properties.</dd>
+    <dd>Raw incoming message data from the API. For details, see the <a href="https://developers.sinch.com/docs/conversation/api-reference/conversation/tag/Messages/" target="_blanc">documentation</a>.</dd>
   </dl>
 </script>

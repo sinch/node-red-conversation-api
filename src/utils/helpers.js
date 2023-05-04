@@ -50,6 +50,10 @@ const getConvAPIURL = (projectId, region = "eu") => {
   return `https://${region}.conversation.api.sinch.com/v1/projects/${projectId}`;
 };
 
+const getTemplateStoreURL = (projectId, region = "eu") => {
+  return `https://${region}.template.api.sinch.com/v1/projects/${projectId}`;
+};
+
 const tryToParseJSON = (data) => {
   try {
     return JSON.parse(data);
@@ -75,6 +79,7 @@ module.exports = {
   getNodesByType,
   keysToCamel,
   getConvAPIURL,
+  getTemplateStoreURL,
   tryToParseJSON,
   interpolateMessage,
   formatConversationMetadata,

@@ -1,0 +1,136 @@
+<script type="text/javascript">
+  const composerURL = "https://dashboard.sinch.com/convapi/message-composer/";
+  RED.nodes.registerType("sinch-template", {
+    color: "#a6bbcf",
+    category: "Sinch Messaging",
+    defaults: {
+      name: { value: "" },
+      convapiConfiguration: {
+        value: "",
+        type: "sinch-convapi-configuration",
+      },
+      template: {
+        value: "",
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-file-code-o",
+    label: function() {
+      return this.name || this._("node-label") || "Template";
+    },
+    paletteLabel: function() {
+      return this._("node-label") || "Template";
+    },
+    oneditprepare,
+  });
+  function oneditprepare() {
+    const nodeInputTemplate = $("#node-input-template");
+    const nodeTemplateLinkBox = $("#node-template-link-box");
+    const nodeTemplateLink = $("#node-template-link");
+    const syncTemplateButton = $("#templates-sync-template-button");
+    const nodeInputConvapiConfiguration = $("#node-input-convapiConfiguration");
+
+    const loadTemplates = (calledFromSyncButton = false, newConfig) => {
+      const convapiVal = newConfig || nodeInputConvapiConfiguration.val();
+
+      // Reset selected template if invalid or no config is choosen
+      if (!convapiVal || convapiVal === "_ADD_") {
+        nodeInputTemplate.empty();
+      }
+
+      if (this.template !== "") {
+        nodeTemplateLink.attr(
+          "href",
+          `${composerURL}${this.template}`
+        );
+        nodeTemplateLinkBox.show();
+      }
+
+      nodeInputTemplate.change((evt) => {
+        if (evt.target.value && evt.target.value !== "") {
+          nodeTemplateLink.attr(
+            "href",
+            `${composerURL}${evt.target.value}`
+          );
+          nodeTemplateLinkBox.show();
+        } else {
+          nodeTemplateLinkBox.hide();
+        }
+      });
+
+      $.ajax({
+        // eslint-disable-next-line no-undef
+        url: location.pathname + "sinch-conversation-api/templates",
+        method: "POST",
+        data: {
+          configNodeId: convapiVal,
+        },
+        success: ({ templates }) => {
+          if (templates && templates.length) {
+            nodeInputTemplate.empty();
+            templates.forEach(({ description, id }) => {
+              nodeInputTemplate.append(
+                $("<option></option>")
+                  .attr("value", id)
+                  .attr("selected", this.template === id)
+                  .text(description)
+              );
+            });
+            nodeInputTemplate.prop("disabled", false);
+            nodeInputTemplate.append(
+              $("<option></option>")
+                .attr("value", "")
+                .text(this._("no-template-selected"))
+            );
+          } else {
+            nodeTemplateLinkBox.hide();
+            nodeInputTemplate.append(
+              $("<option></option>")
+                .attr("value", "")
+                .text(this._("no-templates-available"))
+            );
+          }
+        },
+        error: () => {
+          nodeTemplateLinkBox.hide();
+          if (!calledFromSyncButton) {
+            nodeInputTemplate.append(
+              $("<option></option>")
+                .attr("value", "")
+                .text(this._("authentication-error"))
+            );
+          }
+        },
+      });
+    };
+    nodeInputConvapiConfiguration.change((evt) => {
+      loadTemplates(false, evt.target.value);
+    });
+    syncTemplateButton.click(() => {
+      loadTemplates(true);
+    });
+    loadTemplates();
+  }
+</script>
+
+<script type="text/html" data-template-name="sinch-template">
+  <div class="form-row">
+    <label for="node-input-name"><span data-i18n="name"></span></label>
+    <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name"></div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-convapiConfiguration"><span data-i18n="conversation-api-config"></span></label>
+    <input type="text" id="node-input-convapiConfiguration">
+  </div>
+  <div class="form-row">
+    <label for="node-input-template"><span data-i18n="template"></span></label>
+    <div style="width: 70%; display: inline-flex;">
+      <select id="node-input-template" style="flex-grow: 1;" disabled></select>
+      <a class="red-ui-button" id="templates-sync-template-button" style="margin-left: 10px;"><i class="fa fa-repeat"></i></a>
+    </div>
+  </div>
+  <div class="form-row" id="node-template-link-box" hidden style="margin-left: 105px;">
+    <a href="" id="node-template-link" target="_blank" style="color: blue; text-decoration: underline;">Edit template</a> on Sinch Dashboard.
+  </div>
+</script>

@@ -1,5 +1,5 @@
 const got = require("got");
-const { getConvAPIURL } = require("../utils/helpers");
+const { getConvAPIURL, getTemplateStoreURL } = require("../utils/helpers");
 
 const listApps = async ({ projectId, token, region }) =>
   got({
@@ -70,4 +70,16 @@ const sendMessage = async ({
   });
 };
 
-module.exports = { listApps, updateConversation, sendMessage };
+const listTemplates = async ({ projectId, token, region }) =>
+  got({
+    method: "GET",
+    url: `${getTemplateStoreURL(projectId, region)}/templates`,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  });
+
+
+module.exports = { listApps, updateConversation, sendMessage, listTemplates };

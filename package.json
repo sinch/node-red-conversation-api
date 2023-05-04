@@ -16,6 +16,7 @@
       "sinch-message": "src/nodes/message/message.js",
       "sinch-send": "src/nodes/send/send.js",
       "sinch-start-conversation": "src/nodes/start-conversation/start-conversation.js",
+      "sinch-template": "src/nodes/template/template.js",
       "sinch-api": "src/apis/index.js"
     }
   },

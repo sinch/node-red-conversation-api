@@ -1,5 +1,6 @@
 const { sendMessage, updateConversation } = require("../../apis/conv-api");
 const { getToken } = require("../../apis/auth");
+const { tryToParseJSON } = require("../../utils/helpers");
 
 module.exports = function(RED) {
   class Send {
@@ -8,7 +9,7 @@ module.exports = function(RED) {
       RED.nodes.createNode(this, config);
       this.convApiConfig = RED.nodes.getNode(this.config.convapiConfiguration);
 
-      this.on('input', async (msg, _, done) => {
+      this.on("input", async (msg, _, done) => {
         if (!this.convApiConfig || !this.convApiConfig.config) {
           this.error("Select or configure a Conversation API configuration");
           return;
@@ -23,9 +24,34 @@ module.exports = function(RED) {
           this.error("Incomplete Conversation API configuration");
           return;
         }
-        const { message, contact, variables } = msg;
-        if (!message || !contact) {
-          this.error("No message or contact provided on input");
+        const { message, templateId, contact, variables } = msg;
+        if (!message && !templateId) {
+          this.error("No message or template provided on input");
+          return;
+        }
+
+        let messageToSend = message;
+
+        if (!messageToSend) {
+          messageToSend = {
+            template_message: {
+              omni_template: {
+                template_id: templateId,
+                version: "latest",
+                parameters: tryToParseJSON(variables) || undefined,
+              },
+            },
+          };
+          delete msg.templateId;
+        } else {
+          delete msg.message;
+          if (templateId) {
+            delete msg.templateId;
+          }
+        }
+
+        if (!contact) {
+          this.error("No contact provided on input");
           return;
         }
 
@@ -43,9 +69,9 @@ module.exports = function(RED) {
 
         const { receive } = this.config;
 
-        const messageMetadata = {
-          postbackNode: receive ? this._path : undefined,
-        };
+        const messageMetadata = receive ? {
+          postbackNode: this._path
+        } : undefined;
 
         const conversationMetadata = {
           variables: JSON.stringify(variables),
@@ -56,7 +82,7 @@ module.exports = function(RED) {
           projectId,
           token,
           region,
-          message,
+          message: messageToSend,
           contact,
           appId,
           messageMetadata,

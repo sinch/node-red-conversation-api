@@ -38,7 +38,7 @@
           stateId: stateId,
           width: "Infinity",
           focus: true,
-          complete: function(v, cursor) {
+          complete: function(v) {
             that.editor.setValue(v, -1);
             setTimeout(function() {
               that.editor.restoreView();
@@ -57,7 +57,7 @@
       this.editor.destroy();
       delete this.editor;
     },
-    oneditresize: function(size) {
+    oneditresize: function() {
       var rows = $("#dialog-form>div:not(.node-text-editor-row)");
       var height = $("#dialog-form").height();
       for (var i = 0; i < rows.length; i++) {

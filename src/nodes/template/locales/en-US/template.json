@@ -1,0 +1,9 @@
+{
+  "template": "Template",
+  "node-label": "Template",
+  "name": "Name",
+  "conversation-api-config": "Config",
+  "no-template-selected": "No template selected",
+  "no-templates-available": "No templates available",
+  "authentication-error": "Authentication error"
+}

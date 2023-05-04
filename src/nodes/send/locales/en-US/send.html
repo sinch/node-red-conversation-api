@@ -1,16 +1,21 @@
 <script type="text/html" data-help-name="sinch-send">
   <p>
-      Send a message using the Conversation API. The message is configured in a Message node or passed on <code>msg.message</code>.
+    Sends a message or template using the Conversation API.
   </p>
-  <h2>Node configurations:</h2>
+  <h4>Configuration</h4>
     <ol>
       <li>Configure or select a Conversation API configuration.</li>
-      <li><strong>ttl (optional)</strong> - Time to live. E.g. <code>3s, 2m, 1h</code>.</li>
-      <li><strong>Wait for response</strong> - If checked, then the flow will continue when a response arrives.</li>
+      <li><strong>ttl (Time to live)</strong> - E.g. <code>3s, 2m, 1h</code>.</li>
+      <li><strong>Wait for response</strong> - If checked, the flow will continue when a response arrives.</li>
     </ol>
   <h3>Input</h3>
   <dl class="message-properties">
     <dt>message <span class="property-type">object</span></dt>
     <dd>Message content to be sent.</dd>
+    <dt>templateId <span class="property-type">string</span></dt>
+    <dd>Can be used instead of <code>message</code> to send a message. This will be set if a Template node is configured and placed upstream in the flow.</dd>
   </dl>
+  <p>
+    <strong>Note:</strong> If both <code>msg.message</code> and <code>msg.templateId</code> is provided, <code>msg.message</code> will be used and sent.
+  </p>
 </script>

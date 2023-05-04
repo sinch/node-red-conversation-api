@@ -66,6 +66,10 @@
       }
     });
 
+    nodeInputRegion.change((evt)=> {
+      loadApps(false, evt.target.value);
+    });
+
     const loadApps = () => {
       const usedApps = [];
       const usedAppsForCurrentProject = [];
@@ -78,6 +82,7 @@
         }
       });
       $.ajax({
+        // eslint-disable-next-line no-undef
         url: location.pathname + "sinch-conversation-api/apps",
         method: "POST",
         data: {
@@ -171,16 +176,16 @@
   </div>
 
   <div class="form-row">
-    <label for="node-config-input-keyId"><span data-i18n="keyId"></span></label>
-    <input type="text" id="node-config-input-keyId" placeholder="Key ID">
-  </div>
-
-  <div class="form-row">
     <label for="node-config-input-region"><span data-i18n="region"></span></label>
     <select type="text" id="node-config-input-region">
       <option value="eu">EU</option>
       <option value="us">US</option>
     </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-keyId"><span data-i18n="keyId"></span></label>
+    <input type="text" id="node-config-input-keyId" placeholder="Key ID">
   </div>
 
   <div class="form-row">
