@@ -66,8 +66,8 @@
       }
     });
 
-    nodeInputRegion.change((evt)=> {
-      loadApps(false, evt.target.value);
+    nodeInputRegion.change(() => {
+      loadApps();
     });
 
     const loadApps = () => {
@@ -119,11 +119,14 @@
               nodeInputAppSelect.children("option:selected").text()
             );
           } else {
+            nodeInputAppSelect.empty();
+            this.appId = "";
             nodeInputAppSelect.append(
               $("<option></option>")
                 .attr("value", "")
                 .text(this._("no-apps-available"))
             );
+            nodeInputAppSelect.prop("disabled", true);
           }
           loaderIndicator.hide();
           nodeInputKeySecret.prop("disabled", false);
@@ -136,7 +139,9 @@
               .attr("value", "")
               .text(this._("authentication-error"))
           );
+          this.appId = "";
           loaderIndicator.hide();
+          nodeInputAppSelect.prop("disabled", true);
           nodeInputKeySecret.prop("disabled", false);
           triggerProceedButton.removeClass("disabled");
         },

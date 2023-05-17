@@ -39,7 +39,6 @@ const sendMessage = async ({
   appId,
   messageMetadata,
   conversationMetadata,
-  ttl,
 }) => {
   const { channelIdentities, contactId } = contact;
 
@@ -65,7 +64,6 @@ const sendMessage = async ({
       conversation_metadata: conversationMetadata,
       message_metadata: JSON.stringify(messageMetadata),
       message: typeof message === "string" ? JSON.parse(message) : message,
-      ttl: ttl || undefined,
     }),
   });
 };

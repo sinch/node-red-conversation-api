@@ -14,19 +14,33 @@ module.exports = function(RED) {
           this.error("Select or configure a Conversation API configuration");
           return;
         }
+
         const { config, credentials } = this.convApiConfig;
         if (!credentials) {
           this.error("Missing key secret in Conversation API configuration");
           return;
         }
-        const { projectId, appId, region, keyId, ttl } = config;
+
+        const { projectId, appId, region, keyId } = config;
         if (!projectId || !appId || !region || !keyId) {
           this.error("Incomplete Conversation API configuration");
           return;
         }
+
+        const { keySecret } = credentials;
+        if (!keySecret) {
+          this.error("Missing KeySecret in Conversation API configuration");
+          return;
+        }
+
         const { message, templateId, contact, variables } = msg;
         if (!message && !templateId) {
-          this.error("No message or template provided on input");
+          this.error("No message nor template provided on input");
+          return;
+        }
+
+        if (!contact) {
+          this.error("No contact provided on input");
           return;
         }
 
@@ -38,7 +52,7 @@ module.exports = function(RED) {
               omni_template: {
                 template_id: templateId,
                 version: "latest",
-                parameters: tryToParseJSON(variables) || undefined,
+                parameters: tryToParseJSON(variables) || undefined,
               },
             },
           };
@@ -50,17 +64,6 @@ module.exports = function(RED) {
           }
         }
 
-        if (!contact) {
-          this.error("No contact provided on input");
-          return;
-        }
-
-        const { keySecret } = credentials;
-        if (!keySecret) {
-          this.error("Missing KeySecret in Conversation API configuration");
-          return;
-        }
-
         const token = await getToken(keyId, keySecret);
         if (!token) {
           this.error("Invalid KeyId - KeySecret pair");
@@ -69,9 +72,11 @@ module.exports = function(RED) {
 
         const { receive } = this.config;
 
-        const messageMetadata = receive ? {
-          postbackNode: this._path
-        } : undefined;
+        const messageMetadata = receive
+          ? {
+              postbackNode: this._path,
+            }
+          : undefined;
 
         const conversationMetadata = {
           variables: JSON.stringify(variables),
@@ -87,7 +92,6 @@ module.exports = function(RED) {
           appId,
           messageMetadata,
           conversationMetadata,
-          ttl,
         })
           .then(() => {
             if (!this.config.receive) {
@@ -98,7 +102,7 @@ module.exports = function(RED) {
           })
           .catch((error) => {
             this.error(`Failed to send message: ${error}`);
-            this.send([null, msg]);
+            this.send([null, { ...msg, error }]);
           });
       });
     }

@@ -1,5 +1,5 @@
 const got = require("got");
-const { HYDRA_TOKEN_URL } = require("../constants");
+const { SINCH_TOKEN_URL } = require("../constants");
 
 const safeLimit = 10000;
 let expiresOn = 0;
@@ -12,7 +12,7 @@ const getToken = async (username, password) => {
     expiresOn < Date.now()
   ) {
     const res = await got
-      .post(HYDRA_TOKEN_URL, {
+      .post(SINCH_TOKEN_URL, {
         username,
         password,
         form: { grant_type: "client_credentials" },

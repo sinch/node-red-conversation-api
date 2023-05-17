@@ -9,7 +9,7 @@ module.exports = function(RED) {
       this.on('input', (msg) => {
         let message = msg.message || this.config.message;
         if (!message) {
-          this.error("No message configured or provided to node input");
+          this.error("No message configured nor provided to the node input");
         }
         if (msg && msg.variables) {
           message = interpolateMessage(message, tryToParseJSON(msg.variables));

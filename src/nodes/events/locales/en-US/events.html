@@ -1,6 +1,6 @@
 <script type="text/html" data-help-name="sinch-events">
   <p>
-    Creates an endpoint on <code>/sinch-conversation-api/callback</code> and routes the selected events from the list in the configuration.
+    Listens for events/callbacks on <code>/sinch-conversation-api/callback</code> and routes the selected events from the list in the configuration.
     For more information about the events, see the <a href="https://developers.sinch.com/docs/conversation/callbacks/" target="_blank">documentation</a>.
   </p>
   <h4>Configuration</h4>
@@ -14,5 +14,8 @@
         create a Webhook with Target URL: <strong>&lt;node-red-path&gt;/sinch-conversation-api/callback</strong> and select the Trigger events that are of interest.
       </li>
     </ol>
+  </p>
+  <p>
+    <strong>Note: You will only be able to receive events that your webhook has been configured to trigger.</strong>
   </p>
 </script>

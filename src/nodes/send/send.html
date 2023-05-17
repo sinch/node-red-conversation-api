@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType("sinch-send", {
-    color: "#a6bbcf",
+    color: "#FFBE3C",
     category: "Sinch Messaging",
     defaults: {
       name: { 
@@ -9,9 +9,6 @@
       convapiConfiguration: {
         value: "",
         type: "sinch-convapi-configuration",
-      },
-      ttl: { 
-        value: "",
       },
       receive: {
         value: false,
@@ -38,11 +35,6 @@
   <div class="form-row">
     <label for="node-input-convapiConfiguration"><span data-i18n="conversation-api-config"></span></label>
     <input type="text" id="node-input-convapiConfiguration">
-  </div>
-
-  <div class="form-row">
-    <label for="node-input-ttl"><span data-i18n="ttl"></span></label>
-    <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-ttl"></div>
   </div>
   <div class="form-row">
     <label class="checkbox-label" for="node-input-receive">
