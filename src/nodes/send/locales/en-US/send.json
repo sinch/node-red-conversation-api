@@ -1,7 +1,6 @@
 {
     "node-label": "Send",
     "name": "Name",
-    "ttl": "TTL",
     "conversation-api-config": "Config",
     "wait-for-response": "Wait for response"
 }

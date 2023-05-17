@@ -1,7 +1,7 @@
 <script type="text/html" data-help-name="sinch-start-conversation">
   <p>
     Configure the channel and number/identity for the recipient of an outgoing message. If more than one channel and number are provided, the additional ones will be used as fallback channels
-    if the privous ones fails.
+    if the previous ones fails.
   </p>
   
   <h4>Supported channels</h4>
@@ -18,11 +18,12 @@
   <h3>Outputs</h3>
   <dl class="message-properties">
     <dt>
-      channelIdentities <span class="property-type">Array</span>
+      contact <span class="property-type">object</span>
     </dt>
-    <dd>A list of objects containing channel and identity. The order of the list determines the channel priority order.</dd>
+    <dd>Contains <code>channelIdentities</code> which is a list of objects containing channel and identity. The order of the list determines the 
+      <a href="https://developers.sinch.com/docs/conversation/api-reference/conversation/tag/Messages/#tag/Messages/operation/Messages_SendMessage!path=channel_priority_order&t=request" target="_blank">channel_priority_order.</a></dd>
     <dt>
-      variables <span class="property-type">Object</span>
+      variables <span class="property-type">object</span>
     </dt>
     <dd>Custom data that will be stored on the conversation in the Conversation API and be avalilable on <code>msg.variables</code> throughout the flow.<br>
       <strong>Max 500 chars</strong></dd>

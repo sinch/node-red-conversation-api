@@ -9,11 +9,11 @@ module.exports = function(RED) {
       this.config = config;
       RED.nodes.createNode(this, config);
 
-      this.on("input", (msg) => {
+      this.on("input", (msg, _, done) => {
         const template = this.config.template;
         if (!template) {
           this.error("No template selected in the configuration");
-          return;
+          done();
         }
 
         const newMessage = { ...msg, templateId: template };
