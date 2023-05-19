@@ -1,5 +1,5 @@
 const got = require("got");
-const { getConvAPIURL, getTemplateStoreURL } = require("../utils/helpers");
+const { getConvAPIURL, getTemplateStoreURL, tryToParseJSON } = require("../utils/helpers");
 
 const listApps = async ({ projectId, token, region }) =>
   got({
@@ -63,7 +63,7 @@ const sendMessage = async ({
       recipient,
       conversation_metadata: conversationMetadata,
       message_metadata: JSON.stringify(messageMetadata),
-      message: typeof message === "string" ? JSON.parse(message) : message,
+      message: typeof message === "string" ? tryToParseJSON(message) : message,
     }),
   });
 };
