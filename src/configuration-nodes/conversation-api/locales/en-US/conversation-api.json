@@ -6,6 +6,12 @@
   "keySecret": "Key Secret",
   "authentication-error": "Authentication error",
   "no-apps-available": "No apps available",
+  "dashboard-link": "Sinch Dashboard",
+  "go-to-dashboard": "Configure and create the Apps, Projects, Key ID and Key Secret on the ",
+  "route-events": "For testing of message and event routing from the Conversation API to Node-RED we recommend using a free account on ",
+  "ngrok": "Ngrok",
+  "webhook-url": "In the app configuration, set the target url for the Webhook as: ",
+  "nr-path": "<node-red-path>/sinch-conversation-api/callback",
   "proceed": "Proceed ❯❯",
   "region": "Region"
 }

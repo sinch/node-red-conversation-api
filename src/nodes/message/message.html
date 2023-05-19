@@ -86,4 +86,18 @@
       </div>
   </div>
   <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-message-editor"></div>
+  <div style="width: 400px;">
+    <h3>
+      Example with variable
+    </h3>
+    <pre>
+  {
+    "text_message": {
+        "text": "Hello, {{name}}"
+    }
+  }</pre>
+    <p>
+      Will replace <code>{{name}}</code> with <code>msg.variables.name</code> if set.
+    </p>
+  </div>
 </script>

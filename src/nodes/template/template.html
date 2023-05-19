@@ -84,7 +84,10 @@
                 .text(this._("no-template-selected"))
             );
           } else {
+            nodeInputTemplate.empty();
             nodeTemplateLinkBox.hide();
+            this.template = "";
+            nodeInputTemplate.prop("disabled", true);
             nodeInputTemplate.append(
               $("<option></option>")
                 .attr("value", "")
@@ -93,7 +96,10 @@
           }
         },
         error: () => {
+          nodeInputTemplate.empty();
           nodeTemplateLinkBox.hide();
+          nodeInputTemplate.prop("disabled", true);
+          this.template = "";
           if (!calledFromSyncButton) {
             nodeInputTemplate.append(
               $("<option></option>")
