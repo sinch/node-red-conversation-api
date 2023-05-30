@@ -1,4 +1,35 @@
 <script type="text/javascript">
+  const validateChannelIdentities = (channelIdentities) => {
+    if (!channelIdentities || channelIdentities.length < 1) {
+      return false;
+    }
+    const validChannels = [
+      "SMS",
+      "WHATSAPP",
+      "VIBER",
+      "VIBERBM",
+      "MESSENGER",
+      "RCS",
+      "KAKAOTALK",
+      "MMS",
+      "INSTAGRAM",
+      "KAKAOTALKCHAT",
+      "LINE",
+      "WECHAT",
+      "TELEGRAM",
+    ];
+
+    return channelIdentities.every((channelIdentity) => {
+      const { channel, identity } = channelIdentity;
+      return (
+        channel &&
+        validChannels.includes(channel) &&
+        identity &&
+        identity !== ""
+      );
+    });
+  };
+
   RED.nodes.registerType("sinch-start-conversation", {
     category: "Sinch Messaging",
     color: "#FFBE3C",
@@ -12,6 +43,9 @@
       },
       channelIdentities: {
         value: [{ channel: "SMS", identity: "" }],
+        validate: function(value) {
+          return validateChannelIdentities(value);
+        },
       },
     },
     inputs: 1,
@@ -92,7 +126,7 @@
   function oneditsave() {
     const node = this;
     node.channelIdentities = [];
-    const channelIdentity = { channel: "", identity: "" };
+    let channelIdentity = { channel: "", identity: "" };
     let isChannel = true;
     $("#node-config-input-channelIdentities-container input").each(function(
       _,

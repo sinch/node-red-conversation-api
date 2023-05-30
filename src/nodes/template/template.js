@@ -23,15 +23,22 @@ module.exports = function(RED) {
   }
 
   RED.httpNode.post("/sinch-conversation-api/templates", async (req, res) => {
-    const getNode = GetNode(RED);
-    const { configNodeId } = req.body;
+    const { configuration, configNodeId } = req.body;
 
-    if (!configNodeId || configNodeId === '_ADD_') {
+    let configNode = tryToParseJSON(configuration);
+
+    if (!configuration) {
+      const getNode = GetNode(RED);
+      configNode = getNode(configNodeId);
+    }
+
+    if (!configNode) {
       return res.sendStatus(400);
     }
-    const { config, credentials } = getNode(configNodeId);
 
-    if (!config || ! credentials) {
+    const { credentials, config } = configNode;
+
+    if (!credentials) {
       return res.sendStatus(400);
     }
 

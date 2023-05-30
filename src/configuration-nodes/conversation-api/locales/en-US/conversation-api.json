@@ -12,6 +12,5 @@
   "ngrok": "Ngrok",
   "webhook-url": "In the app configuration, set the target url for the Webhook as: ",
   "nr-path": "<node-red-path>/sinch-conversation-api/callback",
-  "proceed": "Proceed ❯❯",
   "region": "Region"
 }
