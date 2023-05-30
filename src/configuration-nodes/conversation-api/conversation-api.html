@@ -32,7 +32,7 @@
         },
       },
       appDisplayName: { value: "" },
-      region: { values: "eu" },
+      region: { value: "eu" },
     },
     credentials: {
       keySecret: { type: "text", required: true },
@@ -55,7 +55,7 @@
     const nodeInputProjectId = $("#node-config-input-projectId");
     const nodeInputRegion = $("#node-config-input-region");
     const noFreeApps = $("#no-free-apps");
-    const triggerProceedButton = $("#trigger-proceed-button");
+    const triggerRefreshButton = $("#trigger-refresh-button");
 
     nodeInputAppSelect.change((evt) => {
       if (evt.target.value) {
@@ -130,7 +130,7 @@
           }
           loaderIndicator.hide();
           nodeInputKeySecret.prop("disabled", false);
-          triggerProceedButton.removeClass("disabled");
+          triggerRefreshButton.removeClass("disabled");
         },
         error: () => {
           nodeInputAppSelect.empty();
@@ -143,7 +143,7 @@
           loaderIndicator.hide();
           nodeInputAppSelect.prop("disabled", true);
           nodeInputKeySecret.prop("disabled", false);
-          triggerProceedButton.removeClass("disabled");
+          triggerRefreshButton.removeClass("disabled");
         },
         complete: () => {
           nodeInputAppSelect.trigger("change");
@@ -160,10 +160,10 @@
       loadApps();
     }
 
-    triggerProceedButton.click(() => {
+    triggerRefreshButton.click(() => {
       loaderIndicator.show();
       nodeInputKeySecret.prop("disabled", true);
-      triggerProceedButton.addClass("disabled");
+      triggerRefreshButton.addClass("disabled");
       loadApps();
     });
     nodeInputAppSelect.change(() => {
@@ -207,7 +207,7 @@
             </svg>
           </div>
         </div>
-        <a class="red-ui-button disable" id="trigger-proceed-button" data-i18n="proceed"></a>
+        <a class="red-ui-button disable" id="trigger-refresh-button"><i class="fa fa-repeat"></i></a>
       </div>
     </div>
   </div>

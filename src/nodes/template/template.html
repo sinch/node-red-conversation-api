@@ -33,6 +33,13 @@
 
     const loadTemplates = (calledFromSyncButton = false, newConfig) => {
       const convapiVal = newConfig || nodeInputConvapiConfiguration.val();
+      let configuration;
+
+      RED.nodes.eachConfig((config) => {
+        if (config && config.id === convapiVal) {
+          configuration = config;
+        }
+      });
 
       // Reset selected template if invalid or no config is choosen
       if (!convapiVal || convapiVal === "_ADD_") {
@@ -40,32 +47,43 @@
       }
 
       if (this.template !== "") {
-        nodeTemplateLink.attr(
-          "href",
-          `${composerURL}${this.template}`
-        );
+        nodeTemplateLink.attr("href", `${composerURL}${this.template}`);
         nodeTemplateLinkBox.show();
       }
 
-      nodeInputTemplate.change((evt) => {
-        if (evt.target.value && evt.target.value !== "") {
-          nodeTemplateLink.attr(
-            "href",
-            `${composerURL}${evt.target.value}`
-          );
-          nodeTemplateLinkBox.show();
+      let data = {};
+
+      if (configuration) {
+        const { credentials, projectId, region, keyId } = configuration;
+        if (
+          credentials &&
+          credentials.keySecret &&
+          projectId &&
+          region &&
+          keyId
+        ) {
+          data = {
+            configuration: JSON.stringify({
+              credentials,
+              config: {
+                projectId,
+                region,
+                keyId,
+              },
+            }),
+          };
         } else {
-          nodeTemplateLinkBox.hide();
+          data = { configNodeId: convapiVal };
         }
-      });
+      } else {
+        data = { configNodeId: convapiVal };
+      }
 
       $.ajax({
         // eslint-disable-next-line no-undef
         url: location.pathname + "sinch-conversation-api/templates",
         method: "POST",
-        data: {
-          configNodeId: convapiVal,
-        },
+        data,
         success: ({ templates }) => {
           if (templates && templates.length) {
             nodeInputTemplate.empty();
@@ -110,9 +128,20 @@
         },
       });
     };
+
+    nodeInputTemplate.change((evt) => {
+      if (evt.target.value && evt.target.value !== "") {
+        nodeTemplateLink.attr("href", `${composerURL}${evt.target.value}`);
+        nodeTemplateLinkBox.show();
+      } else {
+        nodeTemplateLinkBox.hide();
+      }
+    });
+
     nodeInputConvapiConfiguration.change((evt) => {
       loadTemplates(false, evt.target.value);
     });
+
     syncTemplateButton.click(() => {
       loadTemplates(true);
     });
