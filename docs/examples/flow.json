@@ -1,0 +1,218 @@
+[
+    {
+        "id": "3cd055e7b65a2772",
+        "type": "tab",
+        "label": "Example flow",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1232437c435050a9",
+        "type": "sinch-message",
+        "z": "3cd055e7b65a2772",
+        "name": "Welcome message",
+        "message": "{\n    \"text_message\":{ \n        \"text\": \"Hello {{name}}, Welcome to Sinch!\"\n    }\n}",
+        "x": 650,
+        "y": 160,
+        "wires": [
+            [
+                "99b0f35fdb3c0d71"
+            ]
+        ]
+    },
+    {
+        "id": "9468454a39f1460e",
+        "type": "sinch-received-message",
+        "z": "3cd055e7b65a2772",
+        "name": "",
+        "convapiConfiguration": "",
+        "inputs": 0,
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "c769266b4bb215ac"
+            ]
+        ]
+    },
+    {
+        "id": "ede6479e86b6b8eb",
+        "type": "inject",
+        "z": "3cd055e7b65a2772",
+        "name": "Start",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 160,
+        "wires": [
+            [
+                "2da0af7cd35349e9"
+            ]
+        ]
+    },
+    {
+        "id": "99b0f35fdb3c0d71",
+        "type": "sinch-send",
+        "z": "3cd055e7b65a2772",
+        "name": "Send first message",
+        "convapiConfiguration": "",
+        "receive": false,
+        "x": 910,
+        "y": 160,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "781340d448290a41",
+        "type": "sinch-events",
+        "z": "3cd055e7b65a2772",
+        "name": "Message Deliveries",
+        "events": "messageDeliveryReport",
+        "x": 370,
+        "y": 560,
+        "wires": [
+            [
+                "6644e60a1386799d"
+            ]
+        ]
+    },
+    {
+        "id": "6644e60a1386799d",
+        "type": "debug",
+        "z": "3cd055e7b65a2772",
+        "name": "Inspect event data",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 610,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "2da0af7cd35349e9",
+        "type": "sinch-start-conversation",
+        "z": "3cd055e7b65a2772",
+        "name": "Init conversation",
+        "variables": "{ \"name\": \"Calle\" }",
+        "channelIdentities": [
+            {
+                "channel": "TELEGRAM",
+                "identity": ""
+            }
+        ],
+        "x": 360,
+        "y": 160,
+        "wires": [
+            [
+                "1232437c435050a9"
+            ]
+        ]
+    },
+    {
+        "id": "c769266b4bb215ac",
+        "type": "sinch-message",
+        "z": "3cd055e7b65a2772",
+        "name": "Interesting question",
+        "message": "{\n    \"text_message\":{ \n        \"text\": \"Would you recommend Sinch as a place to work?\"\n    }\n}",
+        "x": 650,
+        "y": 320,
+        "wires": [
+            [
+                "77f85aa58d67c9dc"
+            ]
+        ]
+    },
+    {
+        "id": "77f85aa58d67c9dc",
+        "type": "sinch-send",
+        "z": "3cd055e7b65a2772",
+        "name": "Send first question",
+        "convapiConfiguration": "",
+        "receive": true,
+        "x": 910,
+        "y": 320,
+        "wires": [
+            [
+                "91cecc8df9b1cc14"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "124640c45d9061d9",
+        "type": "sinch-send",
+        "z": "3cd055e7b65a2772",
+        "name": "Send final message",
+        "convapiConfiguration": "",
+        "receive": false,
+        "x": 1030,
+        "y": 440,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "91cecc8df9b1cc14",
+        "type": "sinch-template",
+        "z": "3cd055e7b65a2772",
+        "name": "omni template",
+        "convapiConfiguration": "",
+        "template": "",
+        "x": 760,
+        "y": 440,
+        "wires": [
+            [
+                "124640c45d9061d9"
+            ]
+        ]
+    },
+    {
+        "id": "5f03f56dddc29464",
+        "type": "comment",
+        "z": "3cd055e7b65a2772",
+        "name": "Outbound flow - README",
+        "info": "The outbound flow allows you to start a conversation from Node-RED. \n\nThe following configuration is required to test Outbound Flow:\n\n**Start Conversation node:**\n(Required)\n1. Specify at least one channel and identity. E.g. SMS & +123456789.\n\n(Optional)\n1. Update the variable name to some other name.\n**Message node:**\n(Optional)\n1. The message is preconfigured, if the variable {{name}} is removed from the Start conversation,\nalso remove the variable here.\n\n**Send node:**\n(Required)\n1. Configure or select a Conversation API configuration. The Project ID, Key ID, Key Secret, App can all be\nfound on your account on the [Sinch Dashboard](https://dashboard.sinch.com/).\n\n**Debugging**\nIf you have issues with sending a message there are a few tools to help you out. \n1. Debug messages. Debug messages are found in the right panel in Node-RED and most issues related\nto bad or missing configurations are posted there. \n2. Events node. If the message fails to send on the API level you can configure the Events node\nto receive delivery reports and other types of events. To do so, see the comment node above the\nIncoming events flow. \n\n",
+        "x": 390,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "3a2e7109543d7fc8",
+        "type": "comment",
+        "z": "3cd055e7b65a2772",
+        "name": "Inbound flow - README",
+        "info": "The inbound flow allows you to start a conversation from an incoming message from the \nConversation API. \n\nThe following configuration is required to test Outbound Flow:\n\n**Receive node:**\n(Required)\n1. Configure a Conversation API configuration. The Project ID, Key ID, Key Secret, App can all be\nfound on your account on the [Sinch Dashboard](https://dashboard.sinch.com/).\n2. On you app configuration page on the [Sinch Dashboard](https://dashboard.sinch.com/) make sure\nyou have configured a Webhook and that the trigger INBOUND_MESSAGE is selected. \nThe Webhook shoud point to `<node-red-path>/sinch-conversation-api/callback`.\nFor testing of message and event routing from the Conversation API to Node-RED we recommend \nusing a free account on [Ngrok](https://ngrok.com). \n\n**Message node:**\n(Optionl)\n1. This node comes preconfigured with a message. Feel free to change it or use as is.\n\n**Template node:**\n(Required)\n1. Configure a Conversation API configuration. The Project ID, Key ID, Key Secret, App can all be\nfound on your account on the [Sinch Dashboard](https://dashboard.sinch.com/).\n2. Make sure that you have at least one omni-channel created on the same project selected in the \nConversation API configuration. If not, got to the [Sinch Dashboard](https://dashboard.sinch.com/)\nand create one. \n3. When the Conversation API configuration and template is created, pick a template from the \ndrop down list. \n\n**Send node:**\n(Required)\n1. Configure or select a Conversation API configuration. The Project ID, Key ID, Key Secret, App can all be\nfound on your account on the [Sinch Dashboard](https://dashboard.sinch.com/).\n",
+        "x": 390,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "8d29e2a01c624922",
+        "type": "comment",
+        "z": "3cd055e7b65a2772",
+        "name": "Incoming events - README",
+        "info": "The incoming events node enables you to listen for one or many events that\nmight be triggered from Conversation API. A debug node is connected for testing purposes. \nThe output of the Debug node is printed in the Debug messages in the right sidebar. \n\nThe following configuration is required to test the Incoming events flow:\n\n**Events node:**\n(Required)\n1. On you app configuration page on the [Sinch Dashboard](https://dashboard.sinch.com/) make sure\nyou have configured a Webhook and that at least the trigger MESSAGE_DELIVERY is selected. \nThe Webhook shoud point to `<node-red-path>/sinch-conversation-api/callback`.\nFor testing of message and event routing from the Conversation API to Node-RED we recommend \nusing a free account on [Ngrok](https://ngrok.com). \n",
+        "x": 400,
+        "y": 500,
+        "wires": []
+    }
+]
