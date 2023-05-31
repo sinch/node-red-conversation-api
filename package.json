@@ -1,14 +1,19 @@
 {
   "name": "@sinch/node-red-contrib-sinch-conversation-api",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "author": "Sinch AB",
+  "description": "Package of Sinch messaging nodes for Node-RED",
+  "homepage": "https://www.sinch.com/",
+  "license": "Apache-2.0",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/sinch/node-red-contrib-sinch-conversation-api.git"
+  },
   "scripts": {
     "lint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext .js .",
     "lint:fix": "npm run lint -- --fix",
     "test": "mocha test/**/*_spec.js"
   },
-  "author": "Sinch AB",
-  "license": "ISC",
   "node-red": {
     "nodes": {
       "sinch-convapi-configuration": "src/configuration-nodes/conversation-api/conversation-api.js",
