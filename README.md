@@ -22,7 +22,7 @@ Navigate to the Node-RED installation and install the package:
 
 ```
 $ cd ~/.node-red
-$ npm install node-red-contrib-sinch-conversation-api
+$ npm install @sinch/node-red-contrib-sinch-conversation-api
 ```
 
 Run Node-RED locally: 
@@ -72,6 +72,9 @@ If the "Await response" is checked the flow will continue when a response arrive
 ### Start conversation node
 Allows easy configuration of the receipient of the message(s) to be sent and variables. 
 The recipient is specified by providing one or more channels and identities. For some channels, such as SMS, WhatsApp and RCS, the itentities are phone numbers. The variables can be used if defined in a Message or template node. They are also stored in the conversation API and available throughout the flow on the msg object. 
+
+## Contributing
+See, [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Copyright and license
 
