@@ -1,4 +1,4 @@
-## Contributing to node-red-contrib-sinch-nodes
+## Contributing to @sinch/node-red-conversation-api
 All contributions are welcome. Here are some guidelines you must follow.
 
 ### Raising an issue

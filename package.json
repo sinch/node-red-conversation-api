@@ -1,5 +1,5 @@
 {
-  "name": "@sinch/node-red-contrib-sinch-conversation-api",
+  "name": "@sinch/node-red-conversation-api",
   "version": "1.0.1",
   "author": "Sinch AB",
   "description": "Package of Sinch messaging nodes for Node-RED",
@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sinch/node-red-contrib-sinch-conversation-api.git"
+    "url": "https://github.com/sinch/node-red-conversation-api.git"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint --ignore-path .gitignore --ext .js .",
