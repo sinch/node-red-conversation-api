@@ -15,6 +15,7 @@
     "test": "mocha test/**/*_spec.js"
   },
   "node-red": {
+    "version": ">=3.0.0",
     "nodes": {
       "sinch-convapi-configuration": "src/configuration-nodes/conversation-api/conversation-api.js",
       "sinch-events": "src/nodes/events/events.js",
