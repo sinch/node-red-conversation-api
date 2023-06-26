@@ -1,4 +1,4 @@
-# node-red-contrib-sinch-conversation-api
+# @sinch/node-red-conversation-api
 
 A package of nodes for [Node-RED](https://nodered.org) which allows you to connect, send and receive messages through the Sinch Conversation API. For more information about the Sinch Conversation API, which messaging channels it supports and how to get started, see the [documentation](https://developers.sinch.com/docs/conversation/overview/).
 
@@ -22,7 +22,7 @@ Navigate to the Node-RED installation and install the package:
 
 ```
 $ cd ~/.node-red
-$ npm install @sinch/node-red-contrib-sinch-conversation-api
+$ npm install @sinch/node-red-conversation-api
 ```
 
 Run Node-RED locally: 
@@ -35,7 +35,7 @@ This will start a server for Node-RED on [http://127.0.0.1:1880/](http://127.0.0
 If the installation of the node package was successful, the Sinch Messaging nodes should be available in the node palette to the left, under the category "Sinch Messaging". 
 
 ## Get started
-After you've installed Node-RED and the node-red-contrib-sinch-conversation-api package you can start building your flow. To get you started we provide an example [flows.json](docs/examples/flow.json) containing the essentials for sending and receiving messages. To import the flows.json file, open Node-RED in the brower and select the hamburger menu in the top right corner. Choose "Import" and press "select a file to import". The flow file will then be imported on a tab called "Example flow". 
+After you've installed Node-RED and the @sinch/node-red-conversation-api package you can start building your flow. To get you started we provide an example [flows.json](docs/examples/flow.json) containing the essentials for sending and receiving messages. To import the flows.json file, open Node-RED in the brower and select the hamburger menu in the top right corner. Choose "Import" and press "select a file to import". The flow file will then be imported on a tab called "Example flow". 
 
 The flow.json contains three separate example flows. For each of the flows there exists a comment node containing additional information about the configuration required to test it out.
 
