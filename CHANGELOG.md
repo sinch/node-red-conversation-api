@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3](https://github.com/sinch/node-red-contrib-sinch-conversation-api/compare/v1.0.2...v1.0.3) (2023-07-03)
+
+### Add keyword for Node-RED
+* Add Keyword "node-red" in order to make it available on https://flows.nodered.org/
+
 ## [1.0.2](https://github.com/sinch/node-red-contrib-sinch-conversation-api/compare/v1.0.1...v1.0.2) (2023-06-26)
 
 ### Bug Fixes
