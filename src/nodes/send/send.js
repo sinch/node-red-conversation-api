@@ -72,9 +72,10 @@ module.exports = function(RED) {
 
         const { receive } = this.config;
 
-        const messageMetadata = receive
+        const messageMetadata = receive || msg.messageMetadata
           ? {
-              postbackNode: this._path,
+              postbackNode: receive ? this._path : undefined,
+              ...msg.messageMetadata
             }
           : undefined;
 
