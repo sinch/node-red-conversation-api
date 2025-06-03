@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/sinch/node-red-conversation-api/compare/v1.0.3...v1.1.0) (2025-05-30)
+
+
+### Features
+
+* include message metadata in input ([c6b751c](https://github.com/sinch/node-red-conversation-api/commit/c6b751cefa15058f5a273605c27ae9b55a4e4e08))
+
 ## [1.0.3](https://github.com/sinch/node-red-contrib-sinch-conversation-api/compare/v1.0.2...v1.0.3) (2023-07-03)
 
 ### Add keyword for Node-RED
@@ -17,4 +24,3 @@
 ### Bug Fixes
 
 * typo in readme ([535ee27](https://github.com/sinch/node-red-contrib-sinch-conversation-api/commit/535ee2719f380ef78a3a763fd970d1da0f7762d5))
-
