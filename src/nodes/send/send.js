@@ -33,8 +33,8 @@ module.exports = function(RED) {
           return;
         }
 
-        const { message, templateId, contact, variables } = msg;
-        if (!message && !templateId) {
+        const { message, templateId, contact, variables, template } = msg;
+        if (!message && !templateId && !template) {
           this.error("No message nor template provided on input");
           return;
         }
@@ -44,9 +44,13 @@ module.exports = function(RED) {
           return;
         }
 
-        let messageToSend = message;
-
-        if (!messageToSend) {
+        let messageToSend;
+        if (template) {
+          messageToSend = {
+            template_message: template
+          };
+          delete msg.template;
+        } else if (templateId) {
           messageToSend = {
             template_message: {
               omni_template: {
@@ -58,10 +62,8 @@ module.exports = function(RED) {
           };
           delete msg.templateId;
         } else {
-          delete msg.message;
-          if (templateId) {
-            delete msg.templateId;
-          }
+          messageToSend = message;
+          delete msg.message;          
         }
 
         const token = await getToken(keyId, keySecret);
