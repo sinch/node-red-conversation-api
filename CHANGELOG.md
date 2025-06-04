@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/sinch/node-red-conversation-api/compare/1.1.1...v1.2.0) (2025-06-04)
+
+
+### Features
+
+* allows to specify raw template object ([7e069a0](https://github.com/sinch/node-red-conversation-api/commit/7e069a042f932d7580934639113d71552f50018d))
+
 ## [1.1.0](https://github.com/sinch/node-red-conversation-api/compare/v1.0.3...v1.1.0) (2025-05-30)
 
 

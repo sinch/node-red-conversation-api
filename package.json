@@ -1,6 +1,6 @@
 {
   "name": "@sinch/node-red-conversation-api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Sinch AB",
   "description": "Package of Sinch messaging nodes for Node-RED",
   "homepage": "https://www.sinch.com/",
